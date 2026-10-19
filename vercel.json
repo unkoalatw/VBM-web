@@ -1,0 +1,16 @@
+{
+  "headers": [
+    { "source": "/Build/(.*)\.js\.unityweb", "headers": [
+      { "key": "Content-Encoding", "value": "br" },
+      { "key": "Content-Type", "value": "application/javascript" },
+      { "key": "Cache-Control", "value": "public, max-age=86400" } ] },
+    { "source": "/Build/(.*)\.wasm\.unityweb", "headers": [
+      { "key": "Content-Encoding", "value": "br" },
+      { "key": "Content-Type", "value": "application/wasm" },
+      { "key": "Cache-Control", "value": "public, max-age=86400" } ] },
+    { "source": "/Build/(.*)\.data\.unityweb", "headers": [
+      { "key": "Content-Encoding", "value": "br" },
+      { "key": "Content-Type", "value": "application/octet-stream" },
+      { "key": "Cache-Control", "value": "public, max-age=86400" } ] }
+  ]
+}
