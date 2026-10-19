@@ -41,7 +41,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 <script>
 // 方塊依序出現：每格錯開 0.12 秒
 document.querySelectorAll('.grid i').forEach(function(e,i){e.style.animationDelay=(i*0.12)+'s'});
-var tips=["第一次載入比較久，之後會快很多","太空站裡按 V 開關麥克風","農場一季結束前記得收成","躲貓貓：變成道具後別亂動","加到主畫面，玩起來像 App"];
+var tips=["第一次要下載，之後從快取讀取","太空站裡按 V 開關麥克風","農場一季結束前記得收成","躲貓貓：變成道具後別亂動","加到主畫面，玩起來像 App"];
 var ti=Math.floor(Math.random()*tips.length),tipEl=document.getElementById('tip');
 function nextTip(){tipEl.style.opacity=0;setTimeout(function(){tipEl.textContent=tips[ti++%tips.length];tipEl.style.opacity=.7},300)}
 nextTip();var tipTimer=setInterval(nextTip,4000);
@@ -65,7 +65,7 @@ s.src="Build/Web.loader.js";
 s.onload=function(){
   createUnityInstance(canvas,config,function(p){
     fill.style.width=(100*p)+"%";
-    pct.textContent=p<0.9?("下載中 "+Math.round(p/0.9*100)+"%"):"啟動中…";
+    pct.textContent=p<0.9?("載入中 "+Math.round(p/0.9*100)+"%"):"啟動中…（手機約 10–20 秒）";
   }).then(function(){clearInterval(tipTimer);document.getElementById("load").classList.add("done");canvas.focus();})
   .catch(function(m){alert(m);});
 };
