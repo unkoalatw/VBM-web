@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<title>Visual Block Map</title>
+<style>
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
+#c{position:fixed;inset:0;width:100vw;height:100dvh;display:block;outline:none}
+#load{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#fff;font:600 16px system-ui,sans-serif}
+#bar{width:min(60vw,320px);height:6px;background:#333;border-radius:3px;overflow:hidden}
+#fill{width:0;height:100%;background:#ff3d8b}
+#err{position:fixed;left:0;right:0;top:0;color:#fff;background:#c00;padding:10px;display:none;font:14px system-ui}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="-1"></canvas>
+<div id="load"><div>VBM 載入中…</div><div id="bar"><div id="fill"></div></div></div>
+<div id="err"></div>
+<script>
+var canvas=document.getElementById("c");
+var config={
+  arguments:[],
+  dataUrl:"Build/Web.data",
+  frameworkUrl:"Build/Web.framework.js",
+  codeUrl:"Build/Web.wasm",
+  streamingAssetsUrl:"StreamingAssets",
+  companyName:"VBM Studio",
+  productName:"Visual Block Map",
+  productVersion:"0.1.10",
+  autoSyncPersistentDataPath:true,
+  showBanner:function(msg,type){if(type=='error'){var e=document.getElementById("err");e.textContent=msg;e.style.display='block';}}
+};
+if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) config.devicePixelRatio=Math.min(window.devicePixelRatio,2);
+var s=document.createElement("script");
+s.src="Build/Web.loader.js";
+s.onload=function(){
+  createUnityInstance(canvas,config,function(p){document.getElementById("fill").style.width=(100*p)+"%";})
+  .then(function(){document.getElementById("load").style.display="none";canvas.focus();})
+  .catch(function(m){alert(m);});
+};
+document.body.appendChild(s);
+</script>
+</body>
+</html>
