@@ -155,6 +155,7 @@ Quip_NL0
 Quip_NL1
 Quip_NL2
 Quip_NS0
+Quip_NS1
 Quip_NS2
 Quip_R0_v0
 Quip_R0_v1
@@ -429,4 +430,3 @@ Story_78
 Story_79
 Story_80
 Story_81
-Quip_NS1

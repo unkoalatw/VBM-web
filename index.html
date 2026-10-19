@@ -29,6 +29,32 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 </style>
 </head>
 <body>
+<script>
+// 網頁層錯誤回報（瀏覽器的 JS 錯誤、wasm 當機，Unity 本身收不到）：存 localStorage，3 秒後合併送到後台 /api/errors。
+(function(){
+  var API="https://vbm.littletiger0815.workers.dev/api/errors",KEY="vbm_js_errors",VER="0.1.10";
+  function cid(){try{var c=localStorage.getItem("vbm_js_client");if(!c){c=(crypto.randomUUID?crypto.randomUUID():String(Math.random())).replace(/-/g,"");localStorage.setItem("vbm_js_client",c);}return c;}catch(e){return "web-anon";}}
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){return {};}}
+  function save(m){try{localStorage.setItem(KEY,JSON.stringify(m));}catch(e){}}
+  var timer=null;
+  function add(msg,stack){
+    msg=String(msg||"").slice(0,400); if(!msg) return;
+    var m=load(); if(m[msg]) m[msg].count++; else { if(Object.keys(m).length>=20) return; m[msg]={message:msg,stack:String(stack||"").slice(0,4000),scene:"web",count:1}; }
+    save(m); if(!timer) timer=setTimeout(flush,3000);
+  }
+  function flush(){
+    timer=null; var m=load(),list=Object.keys(m).map(function(k){return m[k];}); if(!list.length||!navigator.onLine) return;
+    save({});
+    fetch(API,{method:"POST",keepalive:true,headers:{"content-type":"application/json"},body:JSON.stringify({client:cid(),version:VER,device:"Web",errors:list})})
+      .then(function(r){if(!r.ok) throw 0;}).catch(function(){var n=load();list.forEach(function(e){if(!n[e.message])n[e.message]=e;});save(n);});
+  }
+  window.addEventListener("error",function(e){ if(e.message) add("[JS] "+e.message, (e.error&&e.error.stack)||(e.filename+":"+e.lineno)); });
+  window.addEventListener("unhandledrejection",function(e){ var r=e.reason; add("[JS] "+(r&&r.message?r.message:String(r)), r&&r.stack); });
+  window.vbmReportError=add;
+  window.addEventListener("online",flush);
+  setTimeout(flush,5000); // 上次沒送出的
+})();
+</script>
 <canvas id="c" tabindex="-1"></canvas>
 <div id="load">
   <div class="logo">VBM</div>
@@ -67,7 +93,7 @@ s.onload=function(){
     fill.style.width=(100*p)+"%";
     pct.textContent=p<0.9?("載入中 "+Math.round(p/0.9*100)+"%"):"啟動中…（手機約 10–20 秒）";
   }).then(function(){clearInterval(tipTimer);document.getElementById("load").classList.add("done");canvas.focus();})
-  .catch(function(m){alert(m);});
+  .catch(function(m){window.vbmReportError&&window.vbmReportError("[Load] "+m,"");alert(m);});
 };
 document.body.appendChild(s);
 </script>
