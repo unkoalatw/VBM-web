@@ -74,9 +74,9 @@ nextTip();var tipTimer=setInterval(nextTip,4000);
 var canvas=document.getElementById("c");
 var config={
   arguments:[],
-  dataUrl:"Build/Web.data.unityweb",
-  frameworkUrl:"Build/Web.framework.js.unityweb",
-  codeUrl:"Build/Web.wasm.unityweb",
+  dataUrl:"Build/Web.data.unityweb?v=20261020130203",
+  frameworkUrl:"Build/Web.framework.js.unityweb?v=20261020130203",
+  codeUrl:"Build/Web.wasm.unityweb?v=20261020130203",
   streamingAssetsUrl:"StreamingAssets",
   companyName:"VBM Studio",
   productName:"Visual Block Map",
@@ -87,7 +87,7 @@ var config={
 if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) config.devicePixelRatio=Math.min(window.devicePixelRatio,2);
 var pct=document.getElementById("pct"),fill=document.getElementById("fill");
 var s=document.createElement("script");
-s.src="Build/Web.loader.js";
+s.src="Build/Web.loader.js?v=20261020130203";
 s.onload=function(){
   createUnityInstance(canvas,config,function(p){
     fill.style.width=(100*p)+"%";
