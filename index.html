@@ -32,14 +32,15 @@ html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#
 <script>
 // 網頁層錯誤回報（瀏覽器的 JS 錯誤、wasm 當機，Unity 本身收不到）：存 localStorage，3 秒後合併送到後台 /api/errors。
 (function(){
-  var API="https://vbm.littletiger0815.workers.dev/api/errors",KEY="vbm_js_errors",VER="0.1.13";
+  var API="https://vbm.littletiger0815.workers.dev/api/errors",KEY="vbm_js_errors",VER="1.0.0";
   function cid(){try{var c=localStorage.getItem("vbm_js_client");if(!c){c=(crypto.randomUUID?crypto.randomUUID():String(Math.random())).replace(/-/g,"");localStorage.setItem("vbm_js_client",c);}return c;}catch(e){return "web-anon";}}
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){return {};}}
   function save(m){try{localStorage.setItem(KEY,JSON.stringify(m));}catch(e){}}
+  function ua(){var u=navigator.userAgent,m=u.match(/(iPhone|iPad|Android[^;)]*)/),b=u.match(/(Edg|SamsungBrowser|Firefox|CriOS|Chrome|Version)\/[0-9]+/);return ((m?m[1]:"PC")+" "+(b?b[0]:"")).slice(0,60);}
   var timer=null;
   function add(msg,stack){
     msg=String(msg||"").slice(0,400); if(!msg) return;
-    var m=load(); if(m[msg]) m[msg].count++; else { if(Object.keys(m).length>=20) return; m[msg]={message:msg,stack:String(stack||"").slice(0,4000),scene:"web",count:1}; }
+    var m=load(); if(m[msg]) m[msg].count++; else { if(Object.keys(m).length>=20) return; m[msg]={message:msg,stack:String(stack||"").slice(0,4000),scene:("web "+ua()).slice(0,40),count:1}; }
     save(m); if(!timer) timer=setTimeout(flush,3000);
   }
   function flush(){
@@ -74,20 +75,20 @@ nextTip();var tipTimer=setInterval(nextTip,4000);
 var canvas=document.getElementById("c");
 var config={
   arguments:[],
-  dataUrl:"Build/Web.data.unityweb?v=20261020161639",
-  frameworkUrl:"Build/Web.framework.js.unityweb?v=20261020161639",
-  codeUrl:"Build/Web.wasm.unityweb?v=20261020161639",
+  dataUrl:"Build/Web.data.unityweb?v=20261021144805",
+  frameworkUrl:"Build/Web.framework.js.unityweb?v=20261021144805",
+  codeUrl:"Build/Web.wasm.unityweb?v=20261021144805",
   streamingAssetsUrl:"StreamingAssets",
   companyName:"VBM Studio",
   productName:"Visual Block Map",
-  productVersion:"0.1.13",
+  productVersion:"1.0.0",
   autoSyncPersistentDataPath:true,
   showBanner:function(msg,type){if(type=='error'){var e=document.getElementById("err");e.textContent=msg;e.style.display='block';}}
 };
 if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) config.devicePixelRatio=Math.min(window.devicePixelRatio,2);
 var pct=document.getElementById("pct"),fill=document.getElementById("fill");
 var s=document.createElement("script");
-s.src="Build/Web.loader.js?v=20261020161639";
+s.src="Build/Web.loader.js?v=20261021144805";
 s.onload=function(){
   createUnityInstance(canvas,config,function(p){
     fill.style.width=(100*p)+"%";
